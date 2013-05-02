@@ -13,46 +13,46 @@ LOG_FILE="<%= scope.lookupvar('hubot::log_file') %>"
 USER=<%= scope.lookupvar('hubot::user') %>
 
 NAME=hubot
-DESC="hubot"
 
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 
 case "$1" in
 start)
-        printf "%-50s" "Starting $DESC..."
-#        echo "runuser -l "$USER" -c \"source "$ROOT_DIR"/hubot.env && cd "$ROOT_DIR"; "$DAEMON" -a "$DAEMON_ADAPTER\" ">> "$LOG_FILE" 2>&1 & echo $!"
-        PID=`runuser -l $USER -c "source $ROOT_DIR/hubot.env && cd $ROOT_DIR; $DAEMON -a $DAEMON_ADAPTER" >> $LOG_FILE 2>&1 & echo $!`
-        #echo "Saving PID" $PID " to " $PIDFILE
+        echo -n $"Starting $NAME: "
+        runuser -l $USER -c "source $ROOT_DIR/hubot.env && cd $ROOT_DIR; $DAEMON -a $DAEMON_ADAPTER" >> $LOG_FILE 2>&1 &
+        sleep 3
+        PID=$(ps aux | grep node | head -1 | awk '{print $2}')
+
         if [ -z $PID ]; then
-            printf "%s\n" "Fail"
+            printf "%s\n" "[ NOT OK]"
         else
             echo $PID > $PIDFILE
-            printf "%s\n" "Ok"
+            printf "%s\n" "[ OK ]"
         fi
 ;;
 status)
-        printf "%-50s" "Checking $DESC..."
+	echo -n $"Status $NAME: "
         if [ -f $PIDFILE ]; then
             PID=`cat $PIDFILE`
             if [ -z "`ps axf | grep ${PID} | grep -v grep`" ]; then
-                printf "%s\n" "Process dead but pidfile exists"
+                printf "%s\n" "[ process dead but pidfile exists ]"
             else
-                echo "Running"
+                echo "[ running ]"
             fi
         else
-            printf "%s\n" "Service not running"
+            printf "%s\n" "[ not running ]"
         fi
 ;;
 stop)
-        printf "%-50s" "Stopping $DESC"
+	echo -n $"Stopping $NAME: "
             PID=`cat $PIDFILE`
         if [ -f $PIDFILE ]; then
             kill $PID
-            printf "%s\n" "Ok"
+            printf "%s\n" "[ OK ]"
             rm -f $PIDFILE
         else
-            printf "%s\n" "pidfile not found"
+            printf "%s\n" "[ pidfile not found ]"
         fi
 ;;
 

@@ -5,7 +5,7 @@
 class hubot::params {
   $dependency_pkgs  = 'coffee-script'
   $pkg_name         = 'hubot'
-  $root_dir         = '/opt/hubot/'
+  $root_dir         = '/opt/hubot'
   $user             = 'hubot'
   $executable       = 'bin/hubot'
 
