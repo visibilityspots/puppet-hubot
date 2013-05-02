@@ -37,7 +37,7 @@ class hubot::config {
   }
 
   exec { 'Add adapter':
-    command     => "sed -i '/\"hubot-scripts\"/i \    \"hubot-irc\":     \">= 0.0.6\",' ${hubot::root_dir}package.json && cd ${hubot::root_dir}; npm update",
+    command     => "sed -i '/\"hubot-scripts\"/i \\    \"hubot-irc\":     \">= 0.0.6\",' ${hubot::root_dir}package.json && cd ${hubot::root_dir}; npm update",
     onlyif      => 'test `cat package.json | grep hubot-irc | wc -l` -le 0',
     refreshonly => true,
     require     => Exec['Initialize hubot']
