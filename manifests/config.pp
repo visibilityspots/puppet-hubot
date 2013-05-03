@@ -47,11 +47,12 @@ class hubot::config {
     command     => "sed -i 's/\"redis-brain.coffee\", //g' ${hubot::root_dir}/hubot-scripts.json",
     require     => Exec['Initialize hubot'],
     refreshonly => true,
-    notify      => Exec['Add adapter']
+    notify      => Exec['Initialize adapter']
   }
 
-  exec { 'Add adapter':
-    command     => "sed -i '/\"hubot-scripts\"/i \\    \"hubot-irc\":     \">= 0.0.6\",' ${hubot::root_dir}/package.json",
+
+  exec { 'Initialize adapter':
+    command     => "sed -i '/\"hubot-scripts\"/i \\    \"hubot-${hubot::adapter}\":     \">= 0.0.1\",' ${hubot::root_dir}/package.json",
     onlyif      => 'test `cat package.json | grep hubot-irc | wc -l` -le 0',
     refreshonly => true,
     require     => Exec['Initialize hubot'],
@@ -59,10 +60,10 @@ class hubot::config {
   }
 
   exec { 'NPM update':
-#    command => "/bin/sh -c \"cd ${hubot::root_dir}; npm update\"",
-    command => 'npm update',
-    cwd     => $hubot::root_dir,
-    require => Exec['Initialize hubot'],
-    notify  => Service['hubot']
+    command     => 'npm update',
+    cwd         => $hubot::root_dir,
+    refreshonly => true,
+    require     => Exec['Initialize hubot'],
+    notify      => Service['hubot']
   }
 }

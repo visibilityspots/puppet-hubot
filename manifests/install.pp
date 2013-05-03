@@ -8,6 +8,10 @@ class hubot::install {
     require  => Package['nodejs']
   }
 
+  package { 'gcc-c++':
+    ensure => 'installed',
+  }
+
   package { $hubot::pkg_name:
     ensure   => 'installed',
     provider => 'npm',
