@@ -23,27 +23,7 @@ class hubot::config {
     ]
   }
 
-  file { "${hubot::root_dir}${hubot::executable}":
-    mode        => '0755',
-    require     => Exec['Initialize hubot'],
-    notify      => Exec['Remove redis']
-  }
-
-  exec { 'Remove redis':
-    command     => "sed -i 's/\"redis-brain.coffee\", //g' ${hubot::root_dir}hubot-scripts.json",
-    require     => Exec['Initialize hubot'],
-    refreshonly => true,
-    notify      => Exec['Add adapter']
-  }
-
-  exec { 'Add adapter':
-    command     => "sed -i '/\"hubot-scripts\"/i \\    \"hubot-irc\":     \">= 0.0.6\",' ${hubot::root_dir}package.json && cd ${hubot::root_dir}; npm update",
-    onlyif      => 'test `cat package.json | grep hubot-irc | wc -l` -le 0',
-    refreshonly => true,
-    require     => Exec['Initialize hubot']
-  }
-
-  file { "${hubot::root_dir}hubot.env":
+  file { "${hubot::root_dir}/hubot.env":
     ensure  => 'present',
     content => template('hubot/hubot.env.erb'),
   }
@@ -52,6 +32,37 @@ class hubot::config {
     ensure  => 'present',
     content => template('hubot/hubot.erb'),
     mode    => '0755',
+    require => File["${hubot::root_dir}/hubot.env"],
+    notify  => Service['hubot']
+  }
+
+
+  file { "${hubot::root_dir}/${hubot::executable}":
+    mode        => '0755',
+    require     => Exec['Initialize hubot'],
+    notify      => Exec['Remove redis']
+  }
+
+  exec { 'Remove redis':
+    command     => "sed -i 's/\"redis-brain.coffee\", //g' ${hubot::root_dir}/hubot-scripts.json",
+    require     => Exec['Initialize hubot'],
+    refreshonly => true,
+    notify      => Exec['Add adapter']
+  }
+
+  exec { 'Add adapter':
+    command     => "sed -i '/\"hubot-scripts\"/i \\    \"hubot-irc\":     \">= 0.0.6\",' ${hubot::root_dir}/package.json",
+    onlyif      => 'test `cat package.json | grep hubot-irc | wc -l` -le 0',
+    refreshonly => true,
+    require     => Exec['Initialize hubot'],
+    notify      => Exec['NPM update']
+  }
+
+  exec { 'NPM update':
+#    command => "/bin/sh -c \"cd ${hubot::root_dir}; npm update\"",
+    command => 'npm update',
+    cwd     => $hubot::root_dir,
+    require => Exec['Initialize hubot'],
     notify  => Service['hubot']
   }
 }
