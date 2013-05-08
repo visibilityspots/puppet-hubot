@@ -12,6 +12,7 @@ class hubot (
   $log_level                     = $hubot::params::log_level,
 
   $adapter                       = $hubot::params::adapter,
+  $plugins                       = $hubot::params::plugins,
 
   $irc_nickname                  = $hubot::params::irc_nickname,
   $irc_server                    = $hubot::params::irc_server,

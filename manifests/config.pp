@@ -28,6 +28,10 @@ class hubot::config {
     content => template('hubot/hubot.env.erb'),
   }
 
+  file { "${hubot::root_dir}/plugins.env":
+    ensure => 'present',
+  }
+
   file { '/etc/init.d/hubot':
     ensure  => 'present',
     content => template('hubot/hubot.erb'),
@@ -35,7 +39,6 @@ class hubot::config {
     require => File["${hubot::root_dir}/hubot.env"],
     notify  => Service['hubot']
   }
-
 
   file { "${hubot::root_dir}/${hubot::executable}":
     mode        => '0755',
@@ -50,7 +53,6 @@ class hubot::config {
     notify      => Exec['Initialize adapter']
   }
 
-
   exec { 'Initialize adapter':
     command     => "sed -i '/\"hubot-scripts\"/i \\    \"hubot-${hubot::adapter}\":     \">= 0.0.1\",' ${hubot::root_dir}/package.json",
     onlyif      => 'test `cat package.json | grep hubot-irc | wc -l` -le 0',
@@ -64,6 +66,13 @@ class hubot::config {
     cwd         => $hubot::root_dir,
     refreshonly => true,
     require     => Exec['Initialize hubot'],
-    notify      => Service['hubot']
+    notify      => Service['hubot'],
+  }
+
+  file { "${hubot::root_dir}/plugin.sh":
+    ensure  => 'present',
+    mode    => '0775',
+    content => template('hubot/plugin.sh.erb'),
+    require => Exec['Initialize adapter']
   }
 }
