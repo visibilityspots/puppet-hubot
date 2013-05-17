@@ -20,7 +20,7 @@ SCRIPTNAME=/etc/init.d/$NAME
 case "$1" in
 start)
         echo -n $"Starting $NAME: "
-        runuser -l $USER -c "source $ROOT_DIR/*.env && cd $ROOT_DIR; $DAEMON -a $DAEMON_ADAPTER" >> $LOG_FILE 2>&1 &
+        runuser -l $USER -c "source $ROOT_DIR/hubot.env && source $ROOT_DIR/plugins.env && cd $ROOT_DIR; $DAEMON -a $DAEMON_ADAPTER" >> $LOG_FILE 2>&1 &
         sleep 3
         PID=$(ps aux | grep node | head -1 | awk '{print $2}')
 
