@@ -40,8 +40,6 @@ class hubot (
   include hubot::config
   include hubot::service
 
-  motd::register{'hubot': }
-
   Class['hubot::install'] ->
   Class['hubot::config'] ->
   Class['hubot::service']
