@@ -1,0 +1,8 @@
+name    	'puppet-hubot'
+version 	'1.0.0'
+source 		'Github'
+author 		'Jan Collijs'
+license 	'GPL'
+summary 	'This module manages the hubot service'
+description 	'Using this module ensures the hubot service will be maintained'
+project_page 	'https://github.ugent.be/Universiteitsbibliotheek/pm_hubot'
