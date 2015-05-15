@@ -1,0 +1,20 @@
+before_install:
+  - sudo apt-get install -qq rpm
+
+install:
+  - gem install package_cloud fpm
+
+rvm:
+  - 1.9.2
+
+env:
+  - PUPPET_VERSION=3.7.5
+
+script:
+  - curl -s https://raw.githubusercontent.com/visibilityspots/ci-scripts/master/puppet/remove-previous-package.sh | bash -s
+  - curl -s https://raw.githubusercontent.com/visibilityspots/ci-scripts/master/puppet/package-puppet-module.sh | bash -s hubot development
+  - package_cloud push visibilityspots/puppet-development-modules/el/6 *.rpm
+
+notifications:
+  email:
+    - travis@visibilityspots.com
