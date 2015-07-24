@@ -1,19 +1,22 @@
-before_install:
-  - sudo apt-get install -qq rpm
+sudo: false
 
-install:
-  - gem install package_cloud fpm
+before_install:
+  - ln -s . hubot
+
+cache:
+  - apt
+  - bundler
+
+addons:
+  apt:
+    packages:
+    - rpm
 
 rvm:
-  - 1.9.2
-
-env:
-  - PUPPET_VERSION=3.7.5
+  - 1.9.3
 
 script:
-  - curl -s https://raw.githubusercontent.com/visibilityspots/ci-scripts/master/puppet/remove-previous-package.sh | bash -s
-  - curl -s https://raw.githubusercontent.com/visibilityspots/ci-scripts/master/puppet/package-puppet-module.sh | bash -s hubot development
-  - package_cloud push visibilityspots/puppet-development-modules/el/6 *.rpm
+  - curl -s https://raw.githubusercontent.com/visibilityspots/ci-scripts/master/travis/puppet-module.sh | bash -s hubot development
 
 notifications:
   email:

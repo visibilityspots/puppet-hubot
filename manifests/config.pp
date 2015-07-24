@@ -8,8 +8,8 @@ class hubot::config {
   }
 
   file { $hubot::root_dir:
-    ensure  => 'directory',
-    notify  => Exec['Initialize hubot']
+    ensure => 'directory',
+    notify => Exec['Initialize hubot']
   }
 
   exec { 'Initialize hubot':
@@ -41,9 +41,9 @@ class hubot::config {
   }
 
   file { "${hubot::root_dir}/${hubot::executable}":
-    mode        => '0755',
-    require     => Exec['Initialize hubot'],
-    notify      => Exec['Remove redis']
+    mode    => '0755',
+    require => Exec['Initialize hubot'],
+    notify  => Exec['Remove redis']
   }
 
   exec { 'Remove redis':
