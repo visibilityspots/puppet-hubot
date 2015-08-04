@@ -1,17 +1,8 @@
 # Class: hubot::install
 #
-# Installation of the hubot npm software
+# Installation of the hubot service
 class hubot::install {
-  package { $hubot::dependency_pkgs:
+  package { 'hubot':
     ensure   => 'installed',
-    provider => 'npm',
-    require  => Package['nodejs']
-  }
-
-  package { $hubot::pkg_name:
-    ensure   => 'installed',
-    provider => 'npm',
-    notify   => Exec['Initialize hubot'],
-    require  => Package[$hubot::dependency_pkgs]
   }
 }
