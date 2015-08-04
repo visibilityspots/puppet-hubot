@@ -1,4 +1,4 @@
-# puppet-hubot module [![Build Status](https://travis-ci.org/visibilityspots/puppet-yum_repo_client.svg?branch=master)](https://travis-ci.org/visibilityspots/puppet-yum_repo_client)
+# puppet-hubot module [![Build Status](https://travis-ci.org/visibilityspots/puppet-hubot.svg?branch=master)](https://travis-ci.org/visibilityspots/puppet-hubot)
 
 A puppet-module which configures the [hubot](https://hubot.github.com/) chat bot
 
