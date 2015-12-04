@@ -2,7 +2,8 @@
 #
 # Installation of the hubot service
 class hubot::install {
-  package { 'hubot':
+  $packages = [ 'redis', 'hubot' ] 
+  package { $packages:
     ensure   => 'installed',
   }
 }

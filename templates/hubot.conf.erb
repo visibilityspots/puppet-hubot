@@ -3,3 +3,9 @@
 ## Module:           '<%= scope.to_hash['module_name'] %>'
 ## Template source:  'MODULES<%=
 template_source.gsub(Regexp.new("^#{Puppet.lookup(:current_environment)[:modulepath].gsub(':','|')}"),"") %>'
+
+[Service]
+<% conf = scope.lookupvar('hubot::configuration') %>
+<% conf.map do |key,value| %>
+Environment=<%= key %>=<%= value %>
+<% end %>
