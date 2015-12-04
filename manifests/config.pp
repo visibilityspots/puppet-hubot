@@ -9,7 +9,7 @@ class hubot::config {
       file { '/etc/systemd/system/hubot.service.d/hubot.conf':
         ensure  => 'present',
         content => template('hubot/hubot.conf.erb'),
-        notify  => Exec['hubot-systemctl-daemon-reload'],
+        notify  => [ Exec['hubot-systemctl-daemon-reload'], Service['hubot'] ],
       }
       exec { 'hubot-systemctl-daemon-reload':
         path        => $::path,
