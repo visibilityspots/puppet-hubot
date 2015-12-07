@@ -2,6 +2,10 @@
 #
 # Initialization class for the hubot bot
 class hubot (
+  # mandatory parameter for OS with systemd
+  $configuration = undef,
+
+  # following parameters are not needed for OS with systemd
   $log_level                     = $hubot::params::log_level,
   $adapter                       = $hubot::params::adapter,
 
@@ -26,6 +30,10 @@ class hubot (
   $xmpp_preferred_sasl_mechanism = $hubot::params::xmpp_preferred_sasl_mechanism,
 
 ) inherits hubot::params {
+
+  if ($::service_provider == 'systemd') and ($configuration == undef) {
+    fail('You have to specify the $configuration parameter.')
+  }
 
   include hubot::install
   include hubot::config
