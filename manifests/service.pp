@@ -2,9 +2,9 @@
 #
 # Class which manages the hubot service
 class hubot::service {
-  service { 'hubot':
-    ensure     => 'running',
-    enable     => true,
-    hasrestart => true,
+  $packages = [ 'redis', 'hubot' ]
+  service { $packages:
+    ensure => 'running',
+    enable => true,
   }
 }
