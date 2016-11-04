@@ -1,5 +1,3 @@
-# puppet-hubot module [![Build Status](https://travis-ci.org/visibilityspots/puppet-hubot.svg?branch=master)](https://travis-ci.org/visibilityspots/puppet-hubot)
-
 A puppet-module which configures the [hubot](https://hubot.github.com/) chat bot
 
 I created an rpm package using hubot version 2.13-2 compiled with hubot-xmpp 0.1.5 and hubot-irc 0.2.7.
@@ -11,31 +9,8 @@ $ curl https://packagecloud.io/install/repositories/visibilityspots/packages/scr
 ```
 
 ## Options (init.d)
-
-```puppet
-  $log_level                     = 'ERROR'
-  $adapter                       = 'irc'
-
-  $irc_nickname                  = 'myhubot'
-  $irc_server                    = 'irc.freenode.net'
-  $irc_rooms                     = '#myhubot-irc'
-  $irc_debug                     = false
-  $irc_unflood                   = false
-  $irc_port                      = undef
-  $irc_password                  = undef
-  $irc_nickserv_password         = undef
-  $irc_nickserv_username         = undef
-  $irc_server_fake_ssl           = false
-  $irc_usessl                    = false
-
-  $xmpp_username                 = undef
-  $xmpp_password                 = undef
-  $xmpp_rooms                    = undef
-  $xmpp_host                     = undef
-  $xmpp_port                     = undef
-  $xmpp_legacyssl                = false
-  $xmpp_preferred_sasl_mechanism = undef
-```
+=======
+I created an rpm package using hubot version 2.17-2 compiled with hubot-xmpp 0.1.8. The detailed process how to compile it and create .rpm package is at the end of this README.md
 
 ## Example
 
@@ -53,9 +28,14 @@ For an implementation with custom values without hiera support (init.d):
   node 'hubot' {
     class {
       'hubot':
-        irc_nickname => 'myhubot',
-        irc_server   => 'irc.freenode.net',
-        irc_rooms    => '#myhubot-irc',
+        $configuration = { 
+          HUBOT_LOG_LEVEL => 'ERROR'
+          HUBOT_AUTH_ADMIN => 'kayn'
+          HUBOT_XMPP_USERNAME => 'hubot@example.com'
+          HUBOT_XMPP_PASSWORD => 'password'
+          HUBOT_XMPP_ROOMS => 'technical@conference.example.com,dailyops@conference.example.com'
+          HUBOT_XMPP_HOST => '127.0.0.1'
+        }
     }
   }
 ```
@@ -80,6 +60,7 @@ For an implementation with custom values without hiera support (systemd):
 
 
 ## Install + package (systemd) - tested on CentOS 7
+=======
 
 ```bash
 ##########################
@@ -107,7 +88,8 @@ mkdir hubot;cd hubot
 
 # now, fill in following configuration (important is xmpp adapter!!!):
 
-? Owner hubot@example.com
+=======
+? Owner hubot@inuits.eu
 ? Bot name hubot
 ? Description A simple helpful robot for your Company
 ? Bot adapter (campfire) xmppgot back false

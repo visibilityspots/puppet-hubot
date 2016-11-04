@@ -9,3 +9,4 @@ template_source.gsub(Regexp.new("^#{Puppet.lookup(:current_environment)[:modulep
 <% conf.map do |key,value| -%>
 Environment=<%= key -%>=<%= value %>
 <% end %>
+
